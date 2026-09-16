@@ -1,0 +1,19 @@
+# Environnement & Secrets
+.env
+
+# Base de données locale
+*.sqlite3
+
+# Python / Django
+__pycache__/
+*.py[cod]
+.venv/
+
+# Node / Vue
+node_modules/
+dist/
+
+# System / IDE
+.DS_Store
+.idea/
+.vscode/
