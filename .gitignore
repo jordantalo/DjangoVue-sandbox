@@ -1,5 +1,6 @@
 # Environnement & Secrets
 .env
+.venv
 
 # Base de données locale
 *.sqlite3

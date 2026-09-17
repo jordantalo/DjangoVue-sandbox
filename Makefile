@@ -31,7 +31,7 @@ clean:
 	$(COMPOSE) down -v
 
 fclean: clean
-		docker system prune -af
+		docker system prune -af --volumes
 
 re: fclean all
 

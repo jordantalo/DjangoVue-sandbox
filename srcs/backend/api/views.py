@@ -20,8 +20,50 @@ def get_players(request):
 @api_view(["POST"])
 def create_player(request):
 	if request.method == "POST":
-		data = JSONParser().parse(request)
-		serializer = PlayerSerializer(data=data)
+		serializer = PlayerSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET", "PUT", "DELETE"])
+def player_detail(request, pk):
+	"""
+    Retrieve, update or delete a player.
+    """
+	try:
+		player = Player.objects.get(pk=pk)
+	except Player.DoesNotExist:
+		return Response(status=status.HTTP_400_BAD_REQUEST)
+
+	if request.method == "GET":
+		serializer = PlayerSerializer(player)
+		return Response(serializer.data)
+
+	elif request.method == "PUT":
+		serializer = PlayerSerializer(player, data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	elif request.method == "DELETE":
+		player.delete()
+		return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(["GET"])
+def get_matches(request):
+	if request.method == "GET":
+		matches = Match.objects.all()
+		serializer = MatchSerializer(matches, many=True)
+		return Response(serializer.data)
+
+	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+def create_match(request):
+	if request.method == "POST":
+		serializer = MatchSerializer(data=request.data)
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
